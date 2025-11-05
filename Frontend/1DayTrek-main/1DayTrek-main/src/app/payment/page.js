@@ -81,7 +81,7 @@ export default function PaymentPage() {
         data.append('payment_screenshot', screenshot, screenshot.name);
 
         try {
-            const response = await fetch("https://disciplined-forgiveness-production.up.railway.app/odt_booking",  {
+            const response = await fetch(`${API_URL}/odt_booking`,  {
                 method: 'POST',
                 body: data,
             });
