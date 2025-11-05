@@ -1,10 +1,10 @@
 from fastapi import FastAPI ,  HTTPException , Response , status , Depends , APIRouter , Form , File , UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from . import models , schema  
+from app import models , schema  
 from sqlalchemy.orm import Session
-from .database import engine , get_db
-from .config import settings  
-from .email_utills import send_booking_email
+from app.database import engine , get_db
+from app.config import settings  
+from app.email_utills import send_booking_email
 import shutil, os
 
 models.Base.metadata.create_all(bind=engine) 
