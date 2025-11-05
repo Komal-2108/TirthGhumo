@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function PaymentPage() {
     const router = useRouter();
     const [formData, setFormData] = useState(null);

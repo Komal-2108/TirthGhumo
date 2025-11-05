@@ -72,7 +72,7 @@ async def odt_booking(full_name: str = Form(...),
         trip_exp_level=trip_exp_level,
         medical_details=medical_details,
         agree=agree,
-       payment_screenshot=file_location
+        payment_screenshot=file_location
     ) 
    
    
