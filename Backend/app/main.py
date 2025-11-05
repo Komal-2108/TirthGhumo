@@ -82,7 +82,11 @@ async def odt_booking(full_name: str = Form(...),
     db.refresh(details)
     await send_booking_email(details , file_location)
 
-    return {details}
+    return {"status": "success", "data": {
+    "id": details.id,
+    "full_name": details.full_name,
+    "email_address": details.email_address
+}}
 
 
 
