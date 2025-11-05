@@ -79,11 +79,3 @@ class ODTResponse(ODTBase):
     class Config:
         from_attributes = True
 
-# class BookingEmail(BaseModel):
-#     name: str
-#     email: EmailStr
-#     age: int
-#     gender: str
-#     mobile: str
-#     college: str
-#     trek_choice: str

@@ -6,18 +6,20 @@ import { useState } from 'react';
 export default function TrekRegistration() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    fullName: '',
-    age: '',
-    gender: '',
-    contactNumber: '',
-    whatsappNumber: '',
-    email: '',
-    collegeName: '',
-    pickUpLocation: '',
-    dropLocation: '',
-    experienceLevel: '',
-    medicalDetails: '',
-  });
+  fullName: '',
+  age: '',
+  gender: '',
+  contactNumber: '',
+  whatsappNumber: '',
+  email: '',
+  collegeName: '',
+  pickUpLocation: '',
+  dropLocation: '',
+  mealPreference: '', // added new field
+  experienceLevel: '',
+  medicalDetails: '', // consistent with backend field
+});
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({
@@ -226,6 +228,7 @@ export default function TrekRegistration() {
                 value={formData.contactNumber}
                 onChange={handleInputChange}
                 placeholder="946589XXXX"
+                maxLength={10}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
               />
@@ -242,7 +245,7 @@ export default function TrekRegistration() {
                 value={formData.whatsappNumber}
                 onChange={handleInputChange}
                 placeholder="946589XXXX"
-                maaxlength={10}
+                maxlength={10}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
               />
@@ -376,7 +379,7 @@ export default function TrekRegistration() {
               </label>
               <textarea
                 name="additionalComments"
-                value={formData.additionalComments}
+                value={formData.medicalDetails}
                 onChange={handleInputChange}
                 placeholder="Any medical conditions or allergies?"
                 rows={2}
