@@ -12,19 +12,11 @@ SQLALCHEMY_DATABASE_URL = settings.database_url
         
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL ,connect_args={"sslmode": "require"},  pool_pre_ping=True,    
-    pool_recycle=1800 )
+    pool_recycle=1800 , pool_size=5, max_overflow=0 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush = False , bind = engine)
 
 Base = declarative_base()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 while True :
     try:
@@ -37,3 +29,22 @@ while True :
         print("Database connection failed ")
         print("Error :" , error)
         time.sleep(2)
+
+# while True :
+#     try:
+          
+#         conn = psycopg2.connect(settings.database_url, cursor_factory=RealDictCursor)
+#         cursor = conn.cursor()
+#         print("Database connection was successful !")
+#         break
+#     except Exception as error:
+#         print("Database connection failed ")
+#         print("Error :" , error)
+#         time.sleep(2)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
