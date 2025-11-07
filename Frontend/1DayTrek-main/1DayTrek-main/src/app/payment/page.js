@@ -97,6 +97,7 @@ export default function PaymentPage() {
             }
         } catch (error) {
             alert('Network error while sending data to backend.');
+            
         } finally {
             setIsSubmitting(false);
         }

@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     mail_starttls : bool 
     mail_ssl_tls : bool 
     use_credentials : bool 
+    resend_api_key:str
 
     class Config:
         env_file = ".env"
