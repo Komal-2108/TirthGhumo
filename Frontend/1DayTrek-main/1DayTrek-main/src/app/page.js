@@ -3,7 +3,6 @@ import Footer from '@/component/footer';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Image from 'next/image';
-import VideoTestimonial from '@/component/video.js';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect } from 'react';
 import { ArrowLeftCircle, ArrowRightCircle, Star } from 'lucide-react';
@@ -14,10 +13,7 @@ import { Menu, X } from "lucide-react";
 export default function TrekRegistration() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const VideoTestimonials = dynamic(
-    () => import("@/component/video.js"),
-    { ssr: false }
-  );
+  
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -109,7 +105,7 @@ export default function TrekRegistration() {
 
   //carousel 
   const [emblaRefGallery, emblaApiGallery] = useEmblaCarousel({ loop: false, align: "start" });
-  const [emblaRefTestimonials, emblaApiTestimonials] = useEmblaCarousel({ loop: false, align: "start" });
+ 
 
 
 
@@ -120,15 +116,6 @@ export default function TrekRegistration() {
   const scrollNextGallery = useCallback(() => {
     if (emblaApiGallery) emblaApiGallery.scrollNext();
   }, [emblaApiGallery]);
-
-
-  const scrollPrevTestimonials = useCallback(() => {
-    if (emblaApiTestimonials) emblaApiTestimonials.scrollPrev();
-  }, [emblaApiTestimonials]);
-
-  const scrollNextTestimonials = useCallback(() => {
-    if (emblaApiTestimonials) emblaApiTestimonials.scrollNext();
-  }, [emblaApiTestimonials]);
 
   // Scroll sideways
   useEffect(() => {
@@ -148,22 +135,6 @@ export default function TrekRegistration() {
     return () => node.removeEventListener("wheel", handleWheel);
   }, [emblaApiGallery]);
 
-  useEffect(() => {
-    if (!emblaApiTestimonials) return;
-
-    const node = emblaApiTestimonials.containerNode();
-
-    const handleWheel = (e) => {
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        e.preventDefault();
-        e.deltaX > 0 ? emblaApiTestimonials.scrollNext() : emblaApiTestimonials.scrollPrev();
-      }
-    };
-
-    node.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => node.removeEventListener("wheel", handleWheel);
-  }, [emblaApiTestimonials]);
 
 
   const gallery = [
@@ -803,7 +774,7 @@ export default function TrekRegistration() {
             </form>
           </div>
         </div>
-        <VideoTestimonials />
+        
         <Footer />
       </div>
     </div >
