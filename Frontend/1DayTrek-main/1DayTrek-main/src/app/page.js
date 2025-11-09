@@ -134,7 +134,7 @@ export default function TrekRegistration() {
 
 
 
-  const gallery = [
+    const gallery = [
     {
       src: "/trek/bhojpur.jpg",
       title: "Bhojpur",
@@ -156,14 +156,14 @@ export default function TrekRegistration() {
       desc: "Celebrating the achievement together.",
     },
     {
-      src: "/trek/summit.jpg",
-      title: "Summit Success",
-      desc: "Celebrating the achievement together.",
+      src: "/trek/temple.jpg",
+      title: "Temple Triumph",
+      desc: "Gathered beneath the ancient temple’s grandeur — a reminder that every journey is sacred when shared together.",
     },
     {
-      src: "/trek/summit.jpg",
-      title: "Summit Success",
-      desc: "Celebrating the achievement together.",
+      src: "/trek/peak.jpg",
+      title: "Peak Serenity",
+      desc: "At the edge of the summit, where the climb meets calm — finding peace in the heights we once only dreamed of reaching.",
     },
   ];
 
