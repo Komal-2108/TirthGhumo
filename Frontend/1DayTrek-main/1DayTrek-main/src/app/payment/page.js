@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import Image from 'next/image'
+import { Menu, X } from "lucide-react";
 
 export default function PaymentPage() {
     const router = useRouter();
@@ -10,15 +10,15 @@ export default function PaymentPage() {
     const [screenshot, setScreenshot] = useState(null);
     const [acknowledged, setAcknowledged] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const [menuOpen, setMenuOpen] = useState(false);
     useEffect(() => {
         const savedData = localStorage.getItem('RegistrationFormData');
         if (savedData) {
             setFormData(JSON.parse(savedData));
         } else {
-            router.replace('/'); 
+            router.replace('/');
         }
-    
+
         const handleBeforeUnload = () => {
             localStorage.removeItem('RegistrationFormData');
         };
@@ -64,40 +64,25 @@ export default function PaymentPage() {
         setIsSubmitting(true);
 
         const data = new FormData();
-        // data.append('payment_screenshot', screenshot);
-        // data.append('form_data', JSON.stringify(formData));
-        
-        data.append('full_name', formData.fullName);
-        data.append('email_address', formData.email);
-        data.append('age', formData.age);
-        data.append('gender', formData.gender);
-        data.append('contact_number', formData.contactNumber);
-        data.append('whatsapp_number', formData.whatsappNumber);
-        data.append('college_name', formData.collegeName);
-        data.append('pick_up_loc', formData.pickUpLocation);
-        data.append('drop_loc', formData.dropLocation);
-        data.append('meal_preference', formData.mealPreference);
-        data.append('trip_exp_level', formData.experienceLevel);
-        data.append('medical_details', formData.medicalDetails);
-        data.append('agree', 'true');
-        data.append('payment_screenshot', screenshot, screenshot.name);
+        data.append('payment_screenshot', screenshot);
+        data.append('form_data', JSON.stringify(formData));
 
         try {
-            const response = await fetch(`${API_URL}/odt_booking`,  {
+            const response = await fetch('https://your-fastapi-backend.com/register', {
                 method: 'POST',
                 body: data,
             });
-
+            
             if (response.ok) {
                 alert('Registration complete!');
                 localStorage.removeItem('RegistrationFormData');
+                sessionStorage.setItem('paymentSuccess', 'true'); // to handle direct access to success page
                 router.push('/success');
             } else {
                 alert('Failed to submit data. Please try again.');
             }
         } catch (error) {
             alert('Network error while sending data to backend.');
-            
         } finally {
             setIsSubmitting(false);
         }
@@ -107,7 +92,85 @@ export default function PaymentPage() {
 
     return (
         <div className="min-h-screen bg-[#FFFDF9] py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-5xl mx-auto">
+            {/* Navbar */}
+            <nav className="w-full h-16 fixed top-0 left-0 z-50 bg-gradient-to-r from-white/80 via-amber-50/70 to-orange-100/70 backdrop-blur-md shadow-sm border-b border-orange-200">
+                <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-full relative">
+
+                    {/* Logo (Always visible) */}
+                    <div className="flex items-center space-x-3">
+                        <Image
+                            src="/logo.png"
+                            alt="Tirth Ghumo Logo"
+                            width={160}
+                            height={60}
+                            className="rounded-xl hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
+
+                    {/* Centered Navigation Links (Hidden on mobile) */}
+                    <div className="hidden md:flex flex-1 justify-center">
+                        <div className="flex items-center space-x-8 text-gray-700 font-semibold text-sm md:text-base">
+                            <a href="https://tirthghumo.in/" className="hover:text-orange-600 transition-colors">
+                                Home
+                            </a>
+                            <a href="#register" className="hover:text-orange-600 transition-colors">
+                                Register
+                            </a>
+                            <a href="#about" className="hover:text-orange-600 transition-colors">
+                                About
+                            </a>
+                            <a href="#contact" className="hover:text-orange-600 transition-colors">
+                                Contact
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Hamburger Button (Visible on mobile) */}
+                    <button
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="md:hidden text-gray-700 focus:outline-none"
+                    >
+                        {menuOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
+                </div>
+
+                {/* Mobile Dropdown Menu */}
+                {menuOpen && (
+                    <div className="md:hidden bg-gradient-to-b from-white/90 to-amber-100/80 backdrop-blur-md shadow-md border-t border-orange-200">
+                        <div className="flex flex-col items-center py-4 space-y-4 text-gray-700 font-semibold text-base">
+                            <a
+                                href="https://tirthghumo.in/"
+                                className="hover:text-orange-600 transition-colors"
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Home
+                            </a>
+                            <a
+                                href="#register"
+                                className="hover:text-orange-600 transition-colors"
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Register
+                            </a>
+                            <a
+                                href="#about"
+                                className="hover:text-orange-600 transition-colors"
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                About
+                            </a>
+                            <a
+                                href="#contact"
+                                className="hover:text-orange-600 transition-colors"
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Contact
+                            </a>
+                        </div>
+                    </div>
+                )}
+            </nav>
+            <div className="max-w-5xl mx-auto mt-10">
                 <h1 className="text-3xl font-extrabold text-center text-[#1C1C1E]">
                     Almost There!
                 </h1>
@@ -149,12 +212,14 @@ export default function PaymentPage() {
                         {/* QR IMAGE */}
                         <div className="flex flex-col justify-center items-center mb-6 ">
                             <a href='/payment/QR.jpg' download="TirthGhumo_QR.jpg" >
-                                <img
+                                <Image
                                     src="/payment/QR.jpg"
                                     alt="QR Code"
-                                    className="w-60 h-auto object-cover rounded-lg shadow-xl hover:scale-108 transition-transform duration-300 "
-
+                                    width={240}
+                                    height={240}
+                                    className="rounded-lg shadow-xl hover:scale-105 transition-transform duration-300"
                                 />
+
                             </a>
                             <p className="text-lg text-gray-500 mt-5 underline ">UPI ID : 6204289831@ybl</p>
                             {/* Download QR */}
