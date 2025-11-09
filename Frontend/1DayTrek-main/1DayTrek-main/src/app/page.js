@@ -214,6 +214,7 @@ export default function TrekRegistration() {
               width={200}
               height={60}
               className="rounded-xl hover:scale-105 transition-transform duration-300"
+              
             />
           </div>
 
@@ -223,7 +224,7 @@ export default function TrekRegistration() {
               <a href="https://tirthghumo.in/" className="hover:text-orange-600 transition-colors">
                 Home
               </a>
-              <a href="#register" className="hover:text-orange-600 transition-colors">
+              <a href="#register"  className="hover:text-orange-600 transition-colors">
                 Register
               </a>
               <a href="#about" className="hover:text-orange-600 transition-colors">
