@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr , Field , validator
 from typing import Optional
 from datetime import date , datetime
 
@@ -60,7 +60,7 @@ class ODTBase(BaseModel):
     gender: str
     contact_number: str
     whatsapp_number: str
-    college_name: Optional[str] = None
+    college_name:str
     pick_up_loc: str
     drop_loc: str
     meal_preference: str
@@ -68,6 +68,17 @@ class ODTBase(BaseModel):
     medical_details: Optional[str] = None
     payment_screenshot: Optional[str] = None
     agree: bool
+
+    @validator(
+        "full_name", "email_address", "gender", "contact_number",
+        "whatsapp_number", "college_name", "pick_up_loc", "drop_loc",
+        "meal_preference"
+    )
+    def no_empty_or_blank(cls, v):
+        if v is None or not v.strip():
+            raise ValueError("Field cannot be empty or blank")
+        return v
+
 
 class ODTCreate(ODTBase):
     pass  # same as base for now

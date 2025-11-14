@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from .database import Base
 from datetime  import date , datetime 
+from sqlalchemy import CheckConstraint
 
 class TripRequest(Base):
     __tablename__ = "trip_requests"
@@ -61,7 +62,7 @@ class ODT(Base):
     gender = Column(String(20), nullable=False)
     contact_number = Column(String(20), nullable=False)
     whatsapp_number = Column(String(20), nullable=False)
-    college_name = Column(String(200))
+    college_name = Column(String(200), nullable=False)
     pick_up_loc = Column(String(50), nullable=False)
     drop_loc = Column(String(50), nullable=False)
     meal_preference = Column(String(30), nullable=False)
@@ -70,3 +71,10 @@ class ODT(Base):
     payment_screenshot = Column(String(255), nullable=False)
     agree = Column(Boolean, default=False)
     submitted_at = Column(TIMESTAMP(timezone=True) , nullable= False ,server_default = text('now()') ) 
+
+    __table_args__ = (
+        CheckConstraint("full_name <> '' AND TRIM(full_name) <> ''", name="full_name_not_blank"),
+        CheckConstraint("email_address <> '' AND TRIM(email_address) <> ''", name="email_not_blank"),
+        CheckConstraint("gender <> '' AND TRIM(gender) <> ''", name="gender_not_blank"),
+        CheckConstraint("college_name <> '' AND TRIM(college_name) <> ''", name="college_not_blank"),
+    )
