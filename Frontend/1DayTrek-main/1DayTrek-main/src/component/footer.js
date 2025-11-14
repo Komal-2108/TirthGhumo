@@ -37,7 +37,7 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className=" flex flex-col w-full md:gap-40 justify-between lg:flex-row ">
+                <div className=" flex md:flex-col w-full  md:gap-40 justify-between lg:flex-row ">
                     {/* Informations */}
                     <div>
                         <h3 className="font-bold mb-5 text-gray-900">Informations</h3>
@@ -64,7 +64,7 @@ export default function Footer() {
                         <ul className="space-y-4 text-sm ">
                             <li><a href="#" className="hover:text-yellow-600 font-san font-semibold">Photography</a></li>
 
-                            {/* Yellow Rounded Button */}
+                            
                             <li>
                                 <a
                                     href="#"

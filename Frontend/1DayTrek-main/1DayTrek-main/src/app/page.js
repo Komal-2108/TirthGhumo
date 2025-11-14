@@ -1,24 +1,78 @@
 'use client';
 import Footer from '@/component/footer';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Image from 'next/image';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useCallback, useEffect } from 'react';
+import { ArrowLeftCircle, ArrowRightCircle, Star } from 'lucide-react';
+import { Menu, X } from "lucide-react";
 
+//swiper
 export default function TrekRegistration() {
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  
+
   const [formData, setFormData] = useState({
-  fullName: '',
-  age: '',
-  gender: '',
-  contactNumber: '',
-  whatsappNumber: '',
-  email: '',
-  collegeName: '',
-  pickUpLocation: '',
-  dropLocation: '',
-  mealPreference: '', // added new field
-  experienceLevel: '',
-  medicalDetails: '', // consistent with backend field
-});
+    fullName: '',
+    age: '',
+    gender: '',
+    contactNumber: '',
+    whatsappNumber: '',
+    email: '',
+    collegeName: '',
+    pickUpLocation: '',
+    dropLocation: '',
+    mealPreference: '',
+    experienceLevel: '',
+    medicalDetails: '',
+  });
+
+  const testimonials = [
+    {
+      name: "Ms. Aaradhana",
+      text: "Tirth Ghumo made our Panchmarhi friend trip completely hassle free and smooth. Food, accomodation and travel was perfectly arranged. Truely a stress-free experience.",
+      image: "/reviews/thumbnail1.jpg",
+      highlight: false,
+      rating: 5,
+    },
+    {
+      name: "Mr. Vatsal",
+      text: "Had an amzing time with Tirth Ghumo. Every moment was full of fun and excitement. From delicious food to thrilling adventures, everything was perfectly on track and made  the trip truly unforgettable.",
+      image: "/reviews/thumbnail2.jpg",
+      highlight: false,
+      rating: 5,
+    },
+    {
+      name: "Ms. Shruti",
+      text: "I had been thinking of taking a break for a long time. Thank you, Tirth Ghumo, for making it happen. Created memories that will last a lifetime.",
+      image: "/reviews/thumbnail3.jpg",
+      highlight: false,
+      rating: 5,
+    },
+    {
+      name: "Mr. Adarsh",
+      text: "Everything went so smoothly with Tirth Ghumo. It truly felt less like a trip with a company and more like a journey with friends. The comfort, care, and vibe made the whole experience unforgettable.",
+      image: "/reviews/thumbnail4.jpg",
+      highlight: false,
+      rating: 5,
+    },
+    {
+      name: "Ms. Sakshi",
+      text: "Amazing experience with Tirth Ghumo! Professional, knowledgeable and friendly team. Perfectly curated itinerary and unforgettable memories.",
+      image: "/reviews/thumbnail5.jpg",
+      highlight: false,
+      rating: 5,
+    },
+    {
+      name: "Mr. Sagar & Mrs.Komal",
+      text: "Our first trip after marriage couldn't have been more perfect! Panchmarhi's scenic beauty, the adventures, and Tirth Ghumo's well-planned itinerary made everything smooth and stress-free. A big thanks to the team for adding a friendly, homely vibe that made our journey even more special.",
+      image: "/reviews/thumbnail6.jpg",
+      highlight: false,
+      rating: 5,
+    },
+  ];
 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,13 +81,13 @@ export default function TrekRegistration() {
     message: ''
   });
 
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData((prev) => ({
-            ...prev, 
-            [name]: value
-        }));
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,403 +95,685 @@ export default function TrekRegistration() {
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
-    localStorage.setItem('RegistrationFormData', JSON.stringify(formData));
+    if (typeof window !== "undefined") {
+  localStorage.setItem('RegistrationFormData', JSON.stringify(formData));
+}
+
     router.push('/payment');
   };
 
+  //carousel 
+  const [emblaRefGallery, emblaApiGallery] = useEmblaCarousel({ loop: false, align: "start" });
+   const [emblaRefTestimonials, emblaApiTestimonials] = useEmblaCarousel({ loop: false, align: "start" });
+
+
+
+  const scrollPrevGallery = useCallback(() => emblaApiGallery && emblaApiGallery.scrollPrev(), [emblaApiGallery]);
+  const scrollNextGallery = useCallback(() => emblaApiGallery && emblaApiGallery.scrollNext(), [emblaApiGallery]);
+
+  const scrollPrevTestimonials = useCallback(() => emblaApiTestimonials && emblaApiTestimonials.scrollPrev(), [emblaApiTestimonials]);
+  const scrollNextTestimonials = useCallback(() => emblaApiTestimonials && emblaApiTestimonials.scrollNext(), [emblaApiTestimonials]);
+  
+  // Scroll sideways
+  useEffect(() => {
+    if (!emblaApiGallery) return;
+
+    const node = emblaApiGallery.containerNode();
+
+    const handleWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+        e.deltaX > 0 ? emblaApiGallery.scrollNext() : emblaApiGallery.scrollPrev();
+      }
+    };
+
+    node.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => node.removeEventListener("wheel", handleWheel);
+  }, [emblaApiGallery]);
+
+
+
+    const gallery = [
+    {
+      src: "/trek/bhojpur.jpg",
+      title: "Bhojpur",
+      desc: "A historical site with ancient temple.",
+    },
+    {
+      src: "/trek/TheAscent1.jpg",
+      title: "The Ascent",
+      desc: "A challenging climb with rewarding views.",
+    },
+    {
+      src: "/trek/riverside.jpg",
+      title: "Riverside",
+      desc: "Discover the local nature.",
+    },
+    {
+      src: "/trek/summit.jpg",
+      title: "Summit Success",
+      desc: "Celebrating the achievement together.",
+    },
+    {
+      src: "/trek/temple.jpg",
+      title: "Temple Triumph",
+      desc: "Gathered beneath the ancient temple’s grandeur — a reminder that every journey is sacred when shared together.",
+    },
+    {
+      src: "/trek/peak.jpg",
+      title: "Peak Serenity",
+      desc: "At the edge of the summit, where the climb meets calm — finding peace in the heights we once only dreamed of reaching.",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#f5f1e8]">
-      {/* Hero Section */}
-      <div className="relative h-[400px] rounded-3xl mx-4 mt-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40" />
-        <img
-          src="/trek/1Day (3).jpg"
-          alt="Mountain landscape at sunrise"
-          className="w-full h-full object-cover object-[center_-500px] "
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
-          <h1 className="text-5xl font-bold mb-3">1 Day Adventure Trek</h1>
-          <p className="text-lg mb-6">November 9, 2025 | Join the Adventure</p>
-          <a
-            href="#register"
-            className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-full font-semibold transition-colors"
+    <div className="relative min-h-screen bg-gradient-to-t to-amber-100 via-orange-50 from-white overflow-hidden ">
+
+
+      <nav className="w-full h-16 fixed top-0 left-0 z-50 bg-gradient-to-r from-white/80 via-amber-50/70 to-orange-100/70 backdrop-blur-md shadow-sm border-b border-orange-200">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-full relative">
+
+
+          <div className="flex items-center space-x-3">
+            <Image
+              src="/logo.png"
+              alt="Tirth Ghumo Logo"
+              width={200}
+              height={60}
+              className="rounded-xl hover:scale-105 transition-transform duration-300"
+              
+            />
+          </div>
+
+
+          <div className="hidden md:flex flex-1 justify-center">
+            <div className="flex items-center space-x-8 text-gray-700 font-semibold text-sm md:text-base">
+              <a href="https://tirthghumo.in/" className="hover:text-orange-600 transition-colors">
+                Home
+              </a>
+              <a href="#register"  className="hover:text-orange-600 transition-colors">
+                Register
+              </a>
+              <a href="#about" className="hover:text-orange-600 transition-colors">
+                About
+              </a>
+              <a href="#contact" className="hover:text-orange-600 transition-colors">
+                Contact
+              </a>
+            </div>
+          </div>
+
+
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-gray-700 focus:outline-none"
           >
-            Register Now
-          </a>
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
-      </div>
 
-      {/* About The Trek */}
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">About The Trek</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-2xl shadow-sm">
-            <div className="text-2xl mb-3">🗺️</div>
-            <h3 className="font-bold text-gray-800 mb-2">Destination</h3>
-            <p className="text-gray-600 text-sm">70km from Bhopal</p>
+        {/* Mobile Dropdown Menu */}
+        {menuOpen && (
+          <div className="md:hidden bg-gradient-to-b from-white/90 to-amber-100/80 backdrop-blur-md shadow-md border-t border-orange-200">
+            <div className="flex flex-col items-center py-4 space-y-4 text-gray-700 font-semibold text-base">
+              <a
+                href="https://tirthghumo.in/"
+                className="hover:text-orange-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Home
+              </a>
+              <a
+                href="#register"
+                className="hover:text-orange-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Register
+              </a>
+              <a
+                href="#about"
+                className="hover:text-orange-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                About
+              </a>
+              <a
+                href="#contact"
+                className="hover:text-orange-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Contact
+              </a>
+            </div>
           </div>
-          <div className="bg-white p-6 rounded-2xl shadow-sm">
-            <div className="text-2xl mb-3">⛰️</div>
-            <h3 className="font-bold text-gray-800 mb-2">Difficulty</h3>
-            <p className="text-gray-600 text-sm">Intermediate (6km Trek)</p>
-          </div>
-          <div className="bg-white p-6 rounded-2xl shadow-sm">
-            <div className="text-2xl mb-3">⏱️</div>
-            <h3 className="font-bold text-gray-800 mb-2">Duration</h3>
-            <p className="text-gray-600 text-sm">8 Hours</p>
-          </div>
-          <div className="bg-white p-6 rounded-2xl shadow-sm">
-            <div className="text-2xl mb-3">⭐</div>
-            <h3 className="font-bold text-gray-800 mb-2">Highlights</h3>
-            <p className="text-gray-600 text-sm">Panoramic Views, Waterfall</p>
-          </div>
-        </div>
-      </div>
+        )}
+      </nav>
+      {/* <div className="fixed inset-0 -z-10">
+        <Image
+          src="/trek/bg.png"
+          alt="Mountain background"
+          fill
+          priority
+          className="object-cover object-center opacity-40"
+        />
+        <div className="absolute inset-0 bg-orange-200/30 mix-blend-overlay" />
+      </div> */}
 
-      {/* Glimpses from the Trail */}
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">Glimpses from the Trail</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 ">
-          <div className="rounded-2xl overflow-hidden shadow-lg">
-            <img
-              src="/trek/bhojpur.jpg"
-              alt="The Ascent"
-              className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-            />
-            <div className="bg-white h-full p-4">
-              <h3 className="font-bold text-gray-800 mb-1">Bhojpur</h3>
-              <p className="text-gray-600 text-sm">A historical site with ancient temple.</p>
-            </div>
-          </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg">
-            <img
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80"
-              alt="Serenity Lake"
-              className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-            />
-            <div className="bg-white p-4 h-full">
-              <h3 className="font-bold text-gray-800 mb-1">The Ascent</h3>
-              <p className="text-gray-600 text-sm">A challenging climb with rewarding views.</p>
-            </div>
-          </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg">
-            <img
-              src="/trek/riverside.jpg"
-              alt="Riverside"
-              className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300 "
-            />
-            <div className="bg-white p-4 h-full">
-              <h3 className="font-bold text-gray-800 mb-1">Riverside</h3>
-              <p className="text-gray-600 text-sm">Discover the local nature.</p>
-            </div>
-          </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg">
-            <img
-              src="/trek/summit.jpg"
-              alt="Summit Success"
-              className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300 "
-            />
-            <div className="bg-white p-4 h-full">
-              <h3 className="font-bold text-gray-800 mb-1">Summit Success</h3>
-              <p className="text-gray-600 text-sm">Celebrating the achievement together.</p>
-            </div>
+
+      <div className="relative z-10">
+        {/* Hero Section */}
+        <div className="relative h-[400px] rounded-3xl mx-4 mt-20 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40" />
+          <Image
+            src="/trek/hero.jpg"
+            alt="Mountain landscape at sunrise"
+            width={1200}
+            height={600}
+            className="w-full h-full object-cover object-[center_-500px]"
+            priority
+          />
+
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
+            <h1 className="text-5xl font-bold mb-3">1 Day Adventure Trek</h1>
+            <p className="text-lg mb-6">November 23, 2025 | Join the Adventure</p>
+            <a
+              href="#register"
+              className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-full font-semibold transition-colors"
+            >
+              Register Now
+            </a>
           </div>
         </div>
-      </div>
 
-      {/* Registration Form */}
-      <div id="register" className="max-w-3xl mx-auto px-4 py-16">
-        <div className="bg-white rounded-3xl shadow-lg p-8 md:p-12">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Secure Your Spot</h2>
+        {/* About The Trek */}
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 mb-10 text-center relative">
+            About the Trek
+            <span className="block w-20 h-1 bg-gradient-to-r from-orange-400 to-amber-300 mx-auto mt-3 rounded-full"></span>
+          </h2>
 
-          {submitStatus.type && (
-            <div
-              className={`mb-6 p-4 rounded-lg ${
-                submitStatus.type === 'success'
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              { icon: "🗺️", title: "Destination", desc: "Just 70km from Bhopal" },
+              { icon: "⛰️", title: "Difficulty", desc: "Intermediate (6km Trek)" },
+              { icon: "⏱️", title: "Duration", desc: "8 Hours of fun & exploration" },
+              { icon: "⭐", title: "Highlights", desc: "Panoramic Views, Riverside, Waterfall" },
+            ].map((item, i) => (
+              <div key={i} className="bg-white p-6 rounded-2xl shadow-sm">
+                <div className="text-2xl mb-3">{item.icon}</div>
+                <h3 className="font-bold text-gray-800 mb-2">{item.title}</h3>
+                <p className="text-gray-600 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+
+        {/* 🗓️ Itinerary Section */}
+        <section className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 mb-10 text-center relative">
+            Trek Itinerary
+            <span className="block w-20 h-1 bg-gradient-to-r from-orange-400 to-amber-300 mx-auto mt-3 rounded-full"></span>
+          </h2>
+
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: "AC Traveller Ride",
+                desc: "Comfortable AC bus from Bhopal to Bhojpur ensuring a relaxed and scenic journey.",
+                icon: "🚌",
+              },
+
+              {
+                title: "Sightseeing & Exploration",
+                desc: "Explore Bhojpur’s ancient temples and scenic trails as per the planned route.",
+                icon: "🗺️",
+              },
+              {
+                title: "Breakfast at Bhojpur",
+                desc: "Start your day with a delicious complimentary breakfast amidst serene surroundings.",
+                icon: "🍳",
+              },
+              {
+                title: "Fun Games & Group Activities",
+                desc: "Bond with fellow trekkers through fun outdoor games and team-building sessions.",
+                icon: "🎯",
+              },
+              {
+                title: "Refreshing Drinks at Trek",
+                desc: "Stay energized with cool refreshments and light snacks at the trek location.",
+                icon: "🥤",
+              },
+              {
+                title: "Maggie by the Riverside",
+                desc: "Enjoy a comforting bowl of maggie with a riverside view — a trekker’s delight!",
+                icon: "🍜",
+              },
+              {
+                title: "Campfire Cooking",
+                desc: "End the adventure with a cozy campfire and live cooking experience.",
+                icon: "🔥",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-4 bg-white shadow-md rounded-2xl p-5 hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="text-3xl bg-gradient-to-br from-orange-300 to-amber-200 rounded-full p-3">
+                  {item.icon}
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-gray-800 mb-1">{item.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
+
+        {/* Glimpses from the Trail */}
+        <div className="max-w-6xl mx-auto px-4 py-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 mb-10 text-center relative">
+            Glimpses from the Trail
+            <span className="block w-20 h-1 bg-gradient-to-r from-orange-400 to-amber-300 mx-auto mt-3 rounded-full"></span>
+          </h2>
+
+
+          <div className="overflow-hidden" ref={emblaRefGallery}>
+            <div className="flex gap-6">
+              {gallery.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex-[0_0_80%] md:flex-[0_0_25%] rounded-2xl overflow-hidden shadow-xl bg-white m-5"
+                >
+                  <img
+                    src={item.src}
+                    alt={item.title}
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-bold text-gray-800 mb-1">{item.title}</h3>
+                    <p className="text-gray-600 text-sm">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Gallery Controls */}
+          <div className="flex justify-center mt-6 gap-4">
+            <button
+              onClick={scrollPrevGallery}
+              className="w-12 h-12 bg-orange-400 rounded-full hover:bg-orange-300 flex items-center justify-center"
+            >
+              <ArrowLeftCircle size={30} className="text-white" />
+            </button>
+            <button
+              onClick={scrollNextGallery}
+              className="w-12 h-12 bg-orange-400 rounded-full hover:bg-orange-300 flex items-center justify-center"
+            >
+              <ArrowRightCircle size={30} className="text-white" />
+            </button>
+          </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <section className="w-full py-16 px-4 mt-17 md:px-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 mb-10 text-center relative">
+            What our Trekkers say
+            <span className="block w-20 h-1 bg-gradient-to-r from-orange-400 to-amber-300 mx-auto mt-3 rounded-full"></span>
+          </h2>
+
+
+          <div className="overflow-hidden w-full" ref={emblaRefTestimonials}>
+            <div className="flex gap-6 sm:gap-10 md:gap-16 px-2 sm:px-6">
+              {testimonials.map((person, index) => (
+                <div
+                  key={index}
+                  className="
+            flex-[0_0_95%] sm:flex-[0_0_70%] md:flex-[0_0_30%]
+            bg-white rounded-2xl p-6 shadow-md
+            hover:scale-105 transition-transform duration-300 my-4
+          "
+                >
+
+                  <div className="flex flex-col items-center text-center mb-4">
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-orange-200 shadow-md">
+                      <Image
+                        src={person.image}
+                        alt={person.name}
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <h3 className="text-blue-900 text-lg md:text-xl font-bold mt-3">
+                      {person.name}
+                    </h3>
+                  </div>
+
+                  <div className="flex items-center justify-center mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={18}
+                        className={
+                          i < person.rating
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-300"
+                        }
+                      />
+                    ))}
+                  </div>
+
+
+                  <p className="text-gray-600 text-sm md:text-base font-medium text-center leading-relaxed">
+                    “{person.text}”
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+
+          {/* Testimonial Controls */}
+          <div className="flex justify-center mt-8 gap-4">
+            <button
+              onClick={scrollPrevTestimonials}
+              className="
+        w-10 h-10 sm:w-12 sm:h-12
+        rounded-full bg-orange-400 hover:bg-orange-300
+        flex items-center justify-center
+        transition-transform hover:scale-110
+      "
+            >
+              <ArrowLeftCircle size={24} className="text-white sm:size-30" />
+            </button>
+
+            <button
+              onClick={scrollNextTestimonials}
+              className="
+        w-10 h-10 sm:w-12 sm:h-12
+        rounded-full bg-orange-400 hover:bg-orange-300
+        flex items-center justify-center
+        transition-transform hover:scale-110
+      "
+            >
+              <ArrowRightCircle size={24} className="text-white sm:size-30" />
+            </button>
+          </div>
+        </section>
+
+
+        {/* Registration Form */}
+        <div id="register" className="max-w-3xl mx-auto px-4 py-16">
+          <div className="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Secure Your Spot</h2>
+
+            {submitStatus.type && (
+              <div
+                className={`mb-6 p-4 rounded-lg ${submitStatus.type === 'success'
                   ? 'bg-green-100 text-green-800'
                   : 'bg-red-100 text-red-800'
-              }`}
-            >
-              {submitStatus.message}
-            </div>
-          )}
+                  }`}
+              >
+                {submitStatus.message}
+              </div>
+            )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name<span className='text-red-600 text-sm'>*</span>
-              </label>
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                placeholder="John Doe"
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              />
-            </div>
-
-            {/* Age & Gender */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Full Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Age & Gender<span className='text-red-600 text-sm'>*</span>
+                  Full Name<span className='text-red-600 text-sm'>*</span>
                 </label>
                 <input
-                  type="number"
-                  name="age"
-                  value={formData.age}
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleInputChange}
-                  placeholder="Age"
+                  placeholder="John Doe"
                   required
-                  min="5"
-                  max="100"
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
                 />
               </div>
+
+              {/* Age & Gender */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Age & Gender<span className='text-red-600 text-sm'>*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleInputChange}
+                    placeholder="Age"
+                    required
+                    min="5"
+                    max="100"
+                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    &nbsp;
+                  </label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                  >
+                    <option value="">Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not-to-say">Prefer not to say</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Contact Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  &nbsp;
+                  Contact Number<span className='text-red-600 text-sm'>*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="contactNumber"
+                  value={formData.contactNumber}
+                  onChange={handleInputChange}
+                  placeholder="946589XXXX"
+                  required
+                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                />
+              </div>
+
+              {/* Emergency Contact */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Whatsapp Number <span className='text-red-600 text-sm'>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="whatsappNumber"
+                  value={formData.whatsappNumber}
+                  onChange={handleInputChange}
+                  placeholder="946589XXXX"
+                  maxLength={10}
+                  required
+                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                />
+              </div>
+
+              {/* Email Address */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address<span className='text-red-600 text-sm'>*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="you@example.com"
+                  required
+                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                />
+              </div>
+
+              {/* College Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  College Name
+                </label>
+                <input
+                  type="text"
+                  name="collegeName"
+                  value={formData.collegeName}
+                  onChange={handleInputChange}
+                  placeholder="University of Adventure"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                />
+              </div>
+
+              {/* Pick Up & Drop Location */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Pick Up Location<span className='text-red-600 text-sm'>*</span>
+                  </label>
+                  <select
+                    name="pickUpLocation"
+                    value={formData.pickUpLocation}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                  >
+                    <option value="">Select pick up point</option>
+                    <option value="LNCT , Raisen Road">LNCT , Raisen Road</option>
+                    <option value="Siddharth Lake City">Siddharth Lake City</option>
+                    <option value="Anand Nagar">Anand Nagar</option>
+                    <option value="Ratnagiri">Ratnagiri</option>
+                    <option value="Piplani Petrol Pump">Piplani Petrol Pump</option>
+                    <option value="Indrapuri BHEL GATE">Indrapuri BHEL GATE</option>
+                    <option value="Jyoti Talkies , M.P.Nagar">Jyoti Talkies , M.P.Nagar</option>
+                    <option value="Rani Kamlapati Station">Rani Kamlapati Station</option>
+
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Drop Location<span className='text-red-600 text-sm'>*</span>
+                  </label>
+                  <select
+                    name="dropLocation"
+                    value={formData.dropLocation}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
+                  >
+                    <option value="">Select pick up point</option>
+                    <option value="LNCT , Raisen Road">LNCT , Raisen Road</option>
+                    <option value="Siddharth Lake City">Siddharth Lake City</option>
+                    <option value="Anand Nagar">Anand Nagar</option>
+                    <option value="Ratnagiri">Ratnagiri</option>
+                    <option value="Piplani Petrol Pump">Piplani Petrol Pump</option>
+                    <option value="Indrapuri BHEL GATE">Indrapuri BHEL GATE</option>
+                    <option value="Jyoti Talkies , M.P.Nagar">Jyoti Talkies , M.P.Nagar</option>
+                    <option value="Rani Kamlapati Station">Rani Kamlapati Station</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Meal options */}
+
+              <div>
+                <label className=" block text-sm font-medium text-gray-700 mb-2 ">
+                  Meal Preference<span className='text-red-600 text-sm'>*</span>
                 </label>
                 <select
-                  name="gender"
-                  value={formData.gender}
+                  name='mealPreference'
+                  value={formData.mealPreference}
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
                 >
-                  <option value="">Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                  <option value="prefer-not-to-say">Prefer not to say</option>
+                  <option value="">Select meal preference</option>
+                  <option value="Yes">Meal</option>
+                  <option value="No">No Meal</option>
                 </select>
               </div>
-            </div>
 
-            {/* Contact Number */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Contact Number<span className='text-red-600 text-sm'>*</span>
-              </label>
-              <input
-                type="tel"
-                name="contactNumber"
-                value={formData.contactNumber}
-                onChange={handleInputChange}
-                placeholder="946589XXXX"
-                maxLength={10}
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              />
-            </div>
-
-            {/* Emergency Contact */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Whatsapp Number <span className='text-red-600 text-sm'>*</span>
-              </label>
-              <input
-                type="text"
-                name="whatsappNumber"
-                value={formData.whatsappNumber}
-                onChange={handleInputChange}
-                placeholder="946589XXXX"
-                maxlength={10}
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              />
-            </div>
-
-            {/* Email Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address<span className='text-red-600 text-sm'>*</span>
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="you@example.com"
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              />
-            </div>
-
-            {/* College Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                College Name
-              </label>
-              <input
-                type="text"
-                name="collegeName"
-                value={formData.collegeName}
-                onChange={handleInputChange}
-                placeholder="University of Adventure"
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              />
-            </div>
-
-            {/* Pick Up & Drop Location */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Trek Experience Level */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Pick Up Location<span className='text-red-600 text-sm'>*</span>
+                  Trek Experience Level<span className='text-red-600 text-sm'>*</span>
                 </label>
                 <select
-                  name="pickUpLocation"
-                  value={formData.pickUpLocation}
+                  name="experienceLevel"
+                  value={formData.experienceLevel}
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
                 >
-                  <option value="">Select pick up point</option>
-                  <option value="LNCT , Raisen Road">LNCT , Raisen Road</option>
-                  <option value="Siddharth Lake City">Siddharth Lake City</option>
-                  <option value="Anand Nagar">Anand Nagar</option>
-                  <option value="Ratnagiri">Ratnagiri</option>
-                  <option value="Piplani Petrol Pump">Piplani Petrol Pump</option>
-                  <option value="Indrapuri BHEL GATE">Indrapuri BHEL GATE</option>
-                  <option value="Jyoti Talkies , M.P.Nagar">Jyoti Talkies , M.P.Nagar</option>
-                  <option value="Rani Kamlapati Station">Rani Kamlapati Station</option>
+                  <option value="">Select your experience</option>
+                  <option value="beginner">Beginner - First time trekker</option>
+                  <option value="intermediate">Intermediate - Done a few treks</option>
+                  <option value="advanced">Advanced - Experienced trekker</option>
+                  <option value="expert">Expert - Professional level</option>
 
                 </select>
               </div>
+
+              {/* Additional Comments */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Drop Location<span className='text-red-600 text-sm'>*</span>
+                  Medical Details
                 </label>
-                <select
-                  name="dropLocation"
-                  value={formData.dropLocation}
+                <textarea
+                  name="medicalDetails"
+                  value={formData.medicalDetails}
                   onChange={handleInputChange}
-                  required
+                  placeholder="Any medical conditions or allergies?"
+                  rows={2}
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-                >
-                  <option value="">Select pick up point</option>
-                  <option value="LNCT , Raisen Road">LNCT , Raisen Road</option>
-                  <option value="Siddharth Lake City">Siddharth Lake City</option>
-                  <option value="Anand Nagar">Anand Nagar</option>
-                  <option value="Ratnagiri">Ratnagiri</option>
-                  <option value="Piplani Petrol Pump">Piplani Petrol Pump</option>
-                  <option value="Indrapuri BHEL GATE">Indrapuri BHEL GATE</option>
-                  <option value="Jyoti Talkies , M.P.Nagar">Jyoti Talkies , M.P.Nagar</option>
-                  <option value="Rani Kamlapati Station">Rani Kamlapati Station</option>
-                </select>
+                />
               </div>
-            </div>
 
-            {/* Meal options */}
-
-            <div>
-              <label className=" block text-sm font-medium text-gray-700 mb-2 "> 
-                Meal Preference<span className='text-red-600 text-sm'>*</span>
-              </label>
-              <select
-              name='mealPreference'
-              value={formData.mealPreference}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              >
-                <option value="">Select meal preference</option>
-                <option value="Yes">Meal</option>
-                <option value="No">No Meal</option>
-              </select>
-            </div>
-
-            {/* Trek Experience Level */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Trek Experience Level<span className='text-red-600 text-sm'>*</span>
-              </label>
-              <select
-                name="experienceLevel"
-                value={formData.experienceLevel}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              >
-                <option value="">Select your experience</option>
-                <option value="beginner">Beginner - First time trekker</option>
-                <option value="intermediate">Intermediate - Done a few treks</option>
-                <option value="advanced">Advanced - Experienced trekker</option>
-                <option value="expert">Expert - Professional level</option>
-                <option value="I can do 6km Trek">I can do 6km Trek</option>
-
-              </select>
-            </div>
-
-            {/* Additional Comments */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Medical Details
-              </label>
-              <textarea
-                name="additionalComments"
-                value={formData.medicalDetails}
-                onChange={handleInputChange}
-                placeholder="Any medical conditions or allergies?"
-                rows={2}
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-700"
-              />
-            </div>
-
-            {/* Payment Details */}
-            {/* <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+              {/* Payment Details */}
+              {/* <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
               <h3 className="font-bold text-gray-800 mb-3">Payment Details</h3>
               <p className="text-gray-600 text-sm mb-3">
                 You will be redirected to our secure payment partner after clicking the button below.
               </p>
               <p className="text-2xl font-bold text-gray-800">Total: $99.00</p>
             </div> */}
-            <div>
+              <div>
 
-            </div>
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-4 rounded-full transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Processing...' : 'Secure My Spot'}
-            </button>
-          </form>
+              </div>
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-4 rounded-full transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Processing...' : 'Secure My Spot'}
+              </button>
+            </form>
+          </div>
         </div>
+        
+        <Footer />
       </div>
-
-      {/* Footer */}
-      {/* <footer className="bg-white py-8 mt-16">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <div className="flex justify-center space-x-6 mb-4">
-            <a href="mailto:contact@sunrisepeak.com" className="text-gray-600 hover:text-gray-800">
-              contact@sunrisepeak.com
-            </a>
-            <span className="text-gray-400">|</span>
-            <a href="tel:+15555873569" className="text-gray-600 hover:text-gray-800">
-              +1 (555) TREK-NOW
-            </a>
-          </div>
-          <div className="flex justify-center space-x-4">
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/>
-                <path d="M12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-800">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </footer> */}
-      <Footer />
-    </div>
+    </div >
   );
 }
