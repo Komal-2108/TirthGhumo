@@ -72,9 +72,4 @@ class ODT(Base):
     agree = Column(Boolean, default=False)
     submitted_at = Column(TIMESTAMP(timezone=True) , nullable= False ,server_default = text('now()') ) 
 
-    __table_args__ = (
-        CheckConstraint("full_name <> '' AND TRIM(full_name) <> ''", name="full_name_not_blank"),
-        CheckConstraint("email_address <> '' AND TRIM(email_address) <> ''", name="email_not_blank"),
-        CheckConstraint("gender <> '' AND TRIM(gender) <> ''", name="gender_not_blank"),
-        CheckConstraint("college_name <> '' AND TRIM(college_name) <> ''", name="college_not_blank"),
-    )
+    
