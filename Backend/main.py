@@ -4,7 +4,8 @@ from app import models , schema
 from sqlalchemy.orm import Session
 from app.database import engine , get_db
 from app.config import settings  
-from app.email_utills import send_booking_email
+from app.utils.email_utills import send_booking_email
+from app.packages import manali , tamia , rishikesh , saarthi 
 import shutil, os
 from fastapi import BackgroundTasks
 
@@ -17,6 +18,8 @@ app = FastAPI()
 
 UPLOAD_DIR = "uploads/"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs("uploads/aadhar", exist_ok=True)
+os.makedirs("uploads/profile", exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,15 +28,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# @app.post("/trip_request" ,status_code=status.HTTP_201_CREATED , response_model= schema.TripRequestResponse)
-# def trip_detail(details : schema.TripRequestBase , db:Session = Depends(get_db)):
-#     details = models.TripRequest(**details.dict())
-
-#     db.add(details)
-#     db.commit() 
-#     db.refresh(details)
-
-#     return details 
+app.include_router(manali.router)
+app.include_router(tamia.router)
+app.include_router(rishikesh.router)
+app.include_router(saarthi.router)
 
 @app.post("/odt_booking" , status_code = status.HTTP_201_CREATED)
 async def odt_booking( background_tasks: BackgroundTasks,

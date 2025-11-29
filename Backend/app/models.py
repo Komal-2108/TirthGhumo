@@ -78,3 +78,90 @@ class ODT(Base):
         CheckConstraint("gender <> '' AND TRIM(gender) <> ''", name="gender_not_blank"),
         CheckConstraint("college_name <> '' AND TRIM(college_name) <> ''", name="college_not_blank"),
     )
+
+class Manali(Base):
+    __tablename__ ="manali"
+
+    id = Column(Integer , primary_key = True , index = True )
+    full_name = Column(String(100) , nullable = False)
+    gender = Column(String(20) , nullable = False)
+    age = Column(Integer , nullable = False)
+    email_address = Column(String(100) , nullable =  False)
+    contact_number = Column(String(20), nullable=False)
+    whatsapp_number = Column(String(20), nullable=False)
+    emergency_contact_number = Column(String(20), nullable=False)
+    college_name = Column(String(200), nullable=False)
+    proof_id_type = Column(String(200) , nullable = False) 
+    chosen_id_number = Column(String(50) , nullable = False) 
+    id_image = Column(String(255) , nullable = False) 
+    medical_details = Column(String(200))
+    special_request = Column(String(300))
+    agree = Column(Boolean, default=False)
+    submitted_at = Column(TIMESTAMP(timezone=True) , nullable= False ,server_default = text('now()') ) 
+
+class Tamia(Base):
+    __tablename__="tamia"
+
+    id = Column(Integer , primary_key = True , index = True )
+    full_name = Column(String(100) , nullable = False)
+    gender = Column(String(20) , nullable = False)
+    age = Column(Integer , nullable = False)
+    email_address = Column(String(100) , nullable =  False)
+    contact_number = Column(String(20), nullable=False)
+    whatsapp_number = Column(String(20), nullable=False)
+    emergency_contact_number = Column(String(20), nullable=False)
+    college_name = Column(String(200), nullable=False)
+    proof_id_type = Column(String(200) , nullable = False) 
+    mode_of_transport = Column(String(50) , nullable = False)
+    chosen_id_number = Column(String(50) , nullable = False) 
+    id_image = Column(String(255) , nullable = False) 
+    medical_details = Column(String(200))
+    special_request = Column(String(300))
+    agree = Column(Boolean, default=False)
+    submitted_at = Column(TIMESTAMP(timezone=True) , nullable= False ,server_default = text('now()') ) 
+
+
+class Rishikesh_Haridwar(Base):
+    __tablename__="rishikesh_haridwar"
+
+    id = Column(Integer , primary_key = True , index = True )
+    full_name = Column(String(100) , nullable = False)
+    gender = Column(String(20) , nullable = False)
+    age = Column(Integer , nullable = False)
+    email_address = Column(String(100) , nullable =  False)
+    contact_number = Column(String(20), nullable=False)
+    whatsapp_number = Column(String(20), nullable=False)
+    emergency_contact_number = Column(String(20), nullable=False)
+    college_name = Column(String(200), nullable=False)
+    proof_id_type = Column(String(200) , nullable = False) 
+    mode_of_transport = Column(String(50) , nullable = False)
+    chosen_id_number = Column(String(50) , nullable = False) 
+    id_image = Column(String(255) , nullable = False) 
+    medical_details = Column(String(200))
+    special_request = Column(String(300))
+    agree = Column(Boolean, default=False)
+    submitted_at = Column(TIMESTAMP(timezone=True) , nullable= False ,server_default = text('now()') ) 
+
+class Saarthi_Form(Base):
+    __tablename__="saarthi_form"
+    id = Column(Integer , primary_key = True , index = True )
+    full_name = Column(String(50) , nullable = False)
+    date_of_birthday = Column(Date , nullable = False)
+    gender = Column(String(20) , nullable = False)
+    aadhar_number = Column(String(50) , nullable = False)
+    aadhar_card_image = Column(String(255) , nullable = False)
+    profile_image = Column(String(255) , nullable = False)
+    email_address = Column(String(100) , nullable =  False)
+    contact_number = Column(String(20), nullable=False)
+    whatsapp_number = Column(String(20), nullable=False)
+    current_city = Column(String(30) , nullable = False) 
+    state = Column(String(30) , nullable = False)
+    address = Column(String(100) , nullable = False)
+    occupation = Column(String(50) , nullable = False)
+    organization_name = Column(String(70) , nullable = False)
+    job_role = Column(String(50) , nullable = False)
+    work_exp = Column(String(30) , nullable = False)
+    company_id = Column(String(255))
+    profile_url = Column(String(300) , nullable = False)
+    role = Column(String(100) , nullable = False) 
+    motive = Column(String(300) , nullable = False)

@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     mail_ssl_tls : bool 
     use_credentials : bool 
     resend_api_key:str
+    supabase_bucket: str
+    supabase_url: str
+    supabase_key: str
+    
 
     class Config:
         env_file = ".env"
